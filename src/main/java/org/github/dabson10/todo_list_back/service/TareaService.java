@@ -2,8 +2,8 @@ package org.github.dabson10.todo_list_back.service;
 
 import org.github.dabson10.todo_list_back.DTOs.TareaDTO;
 import org.github.dabson10.todo_list_back.entity.Tarea;
-import org.github.dabson10.todo_list_back.entity.Usuario;
 import org.github.dabson10.todo_list_back.repository.InTareaRepository;
+import org.github.dabson10.todo_list_back.utilidades.FormatearTarea;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -13,7 +13,7 @@ import java.util.List;
 public class TareaService implements InTareaService {
 
     final InTareaRepository taRe;
-
+    FormatearTarea formDTO = new FormatearTarea();
     public TareaService(InTareaRepository taRe) {
         this.taRe = taRe;
     }
@@ -31,7 +31,7 @@ public class TareaService implements InTareaService {
     @Override
     public TareaDTO traerTarea(Long id) {
         Tarea tar = this.getTarea(id);
-        return formatearDTO(tar);
+        return formDTO.formatearDTO(tar);
     }
 
     @Override
@@ -41,7 +41,7 @@ public class TareaService implements InTareaService {
 
         for (Tarea tarea : lista) {
 
-            TareaDTO tare = formatearDTO(tarea);
+            TareaDTO tare = formDTO.formatearDTO(tarea);
             listDTO.add(tare);
         }
 
@@ -49,27 +49,25 @@ public class TareaService implements InTareaService {
         return listDTO;
     }
 
-    public TareaDTO formatearDTO(Tarea tar){
-        TareaDTO tareDto = new TareaDTO();
-        Usuario usu = tar.getUsuario();
-        tareDto.setId_tarea(tar.getId_tarea());
-        tareDto.setNombre(tar.getNombre());
-        tareDto.setDescripcion(tar.getDescripcion());
-        tareDto.setEstado(tar.getEstado());
-        tareDto.setPrioridad(tar.getPrioridad());
-        tareDto.setFecha_creacion(tar.getFecha_creacion());
-        tareDto.setFecha_limite(tar.getFecha_limite());
-        tareDto.setId_usuario(usu.getId());
-        return tareDto;
+
+
+    @Override //Usando método PUT
+    public void editarTarea(Tarea tarea) {
+        Tarea tare = this.getTarea(tarea.getId_tarea());
+        tare = formDTO.formatearTarea(tare, tarea);
+
+        taRe.save(tare);
+    }
+
+    @Override //Usando método PATCH
+    public void editarEstado(Tarea tarea) {
+        Tarea tar = this.getTarea(tarea.getId_tarea());
+        tar.setEstado(tarea.getEstado());
+        taRe.save(tar);
     }
 
     @Override
-    public void editarTarea(TareaDTO tareaDTO) {
-
-    }
-
-    @Override
-    public void editarEstado(TareaDTO tareaDTO) {
-
+    public void eliminarTarea(Long id) {
+        taRe.deleteById(id);
     }
 }

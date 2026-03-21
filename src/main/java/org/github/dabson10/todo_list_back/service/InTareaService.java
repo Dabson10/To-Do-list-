@@ -13,8 +13,10 @@ public interface InTareaService {
 
     public List<TareaDTO> traerTareas();
 
-    public void editarTarea(TareaDTO tareaDTO);
-    public void editarEstado(TareaDTO tareaDTO);
+    public void editarTarea(Tarea tarea);
+    public void editarEstado(Tarea tarea);
+
+    public void eliminarTarea(Long id);
 
 
 }
