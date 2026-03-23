@@ -29,13 +29,21 @@ public class UsuarioService implements InUsuarioService{
 
     /**
      * Función para crear un usuario y encriptar la contraseña.
+     *
      * @param usuario : Objeto que contendrá la información del usuario.
      */
     @Override
-    public void crearUsuario(Usuario usuario) {
+    public Usuario crearUsuario(Usuario usuario) {
+        Usuario usu = usuRe.findByCorreo(usuario.getCorreo());
+        //Si encuentra un usuario que no sea null, entonces regresamos, por que ya existe un usuario con ese
+        //correo
+        if(usu != null){
+            return null;
+        }
+        //Si no encontro usuario entonces regresamos el objeto.
         String contraOculta = ocultarC.ocultarContrasI(usuario.getClave());
         usuario.setClave(contraOculta);
-        usuRe.save(usuario);
+        return usuRe.save(usuario);
     }
 
     //====================== FUNCIONES DE BÚSQUEDA ================================
@@ -58,27 +66,27 @@ public class UsuarioService implements InUsuarioService{
     @Override
     public UsuarioTareasDTO traerUsuario(Credencial credencial) {
         Usuario usuario = usuRe.findByCorreo(credencial.getCorreo());
-        UsuarioTareasDTO usuTa = new UsuarioTareasDTO();
         if(usuario == null){
             return null;
         }
+
+        if(!validarC.validarClave(credencial.getClave(), usuario.getClave())){
+            return null;
+        }
+        UsuarioTareasDTO usuTa = new UsuarioTareasDTO();
         List<Tarea> list = usuario.getTareas();
         List<TareaDTO> listDTO = new ArrayList<>();
+        usuTa.setId_usuario(usuario.getId());
+        usuTa.setNombre(usuario.getNombre());
+        usuTa.setApellido(usuario.getApellido());
+        usuTa.setCorreo(usuario.getCorreo());
+        usuTa.setClave(usuario.getClave());
 
-
-        if(validarC.validarClave(credencial.getClave(), usuario.getClave())){
-            usuTa.setId_usuario(usuario.getId());
-            usuTa.setNombre(usuario.getNombre());
-            usuTa.setApellido(usuario.getApellido());
-            usuTa.setCorreo(usuario.getCorreo());
-            usuTa.setClave(usuario.getClave());
-
-            for(Tarea tarea : list){
-                TareaDTO tareaDTO = formDTO.formatearDTO(tarea);
-                listDTO.add(tareaDTO);
-            }
-            usuTa.setTareas(listDTO);
+        for(Tarea tarea : list){
+            TareaDTO tareaDTO = formDTO.formatearDTO(tarea);
+            listDTO.add(tareaDTO);
         }
+        usuTa.setTareas(listDTO);
         return usuTa;
     }
 

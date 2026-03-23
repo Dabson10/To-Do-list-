@@ -4,8 +4,12 @@ import org.github.dabson10.todo_list_back.DTOs.UsuarioTareasDTO;
 import org.github.dabson10.todo_list_back.entity.Credencial;
 import org.github.dabson10.todo_list_back.entity.Usuario;
 import org.github.dabson10.todo_list_back.service.UsuarioService;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+@CrossOrigin(origins = "http://127.0.0.1:5500")
 @RestController
 @RequestMapping("/usuario")
 public class UsuarioController {
@@ -18,18 +22,27 @@ public class UsuarioController {
 
 
     @PostMapping("/crear")
-    public void crearUsuario(
+    public ResponseEntity<Usuario> crearUsuario(
             @RequestBody Usuario usuario
     ){
-        seUs.crearUsuario(usuario);
+        Usuario usu = seUs.crearUsuario(usuario);
+        if(usu == null){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
+
+        return new ResponseEntity<>(usu, HttpStatus.OK);
     }
 
 
     @PostMapping("/traer")
-    public UsuarioTareasDTO traerUsuario(
+    public ResponseEntity<UsuarioTareasDTO> traerUsuario(
             @RequestBody Credencial credencial
     ){
-        return seUs.traerUsuario(credencial);
+        UsuarioTareasDTO usuarioConfirmed = seUs.traerUsuario(credencial);
+        if(usuarioConfirmed == null){
+            return  ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
+        return new ResponseEntity<>(usuarioConfirmed, HttpStatus.OK);
     }
 
 
