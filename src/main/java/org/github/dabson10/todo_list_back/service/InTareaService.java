@@ -8,6 +8,7 @@ import java.util.List;
 public interface InTareaService {
     public void crearTarea(Tarea tarea);
 
+    public List<TareaDTO> traerTareasUsuario(Long id_usuario);
     public Tarea getTarea(Long id);
     public TareaDTO traerTarea(Long id);
 

@@ -2,7 +2,9 @@ package org.github.dabson10.todo_list_back.service;
 
 import org.github.dabson10.todo_list_back.DTOs.TareaDTO;
 import org.github.dabson10.todo_list_back.entity.Tarea;
+import org.github.dabson10.todo_list_back.entity.Usuario;
 import org.github.dabson10.todo_list_back.repository.InTareaRepository;
+import org.github.dabson10.todo_list_back.repository.InUsuarioRepository;
 import org.github.dabson10.todo_list_back.utilidades.FormatearTarea;
 import org.springframework.stereotype.Service;
 
@@ -13,14 +15,27 @@ import java.util.List;
 public class TareaService implements InTareaService {
 
     final InTareaRepository taRe;
+    final UsuarioService usuRe;
     FormatearTarea formDTO = new FormatearTarea();
-    public TareaService(InTareaRepository taRe) {
+    public TareaService(InTareaRepository taRe, UsuarioService usuRe) {
         this.taRe = taRe;
+        this.usuRe = usuRe;
     }
 
     @Override
     public void crearTarea(Tarea tarea) {
         taRe.save(tarea);
+    }
+
+    //Esta función realizará un findUsuario con el objeto de la clase UsuarioService y ahi obtienes el objeto
+    @Override
+    public List<TareaDTO> traerTareasUsuario(Long id_usuario) {
+        List<Tarea> tareas = taRe.findTareasByUsuario_Id(id_usuario);
+        List<TareaDTO> lisTarea = new ArrayList<>();
+        for(Tarea tarea : tareas){
+            lisTarea.add(formDTO.formatearDTO(tarea));
+        }
+        return lisTarea;
     }
 
     @Override

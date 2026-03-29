@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+//@CrossOrigin(origins = "https://to-do-dabson.netlify.app")
+@CrossOrigin(origins = "http://127.0.0.1:5500")
 @RestController
 @RequestMapping("/tarea")
 public class TareaController {
@@ -35,11 +37,11 @@ public class TareaController {
      * }
      */
     @PostMapping("/crear")
-    public ResponseEntity<String> crearTarea(
+    public ResponseEntity<Tarea> crearTarea(
             @RequestBody Tarea tarea
     ){
         taRe.crearTarea(tarea);
-        return ResponseEntity.status(HttpStatus.CREATED).body("Tarea creada");
+        return ResponseEntity.status(HttpStatus.CREATED).body(tarea);
     }
 
 
@@ -54,6 +56,13 @@ public class TareaController {
     @GetMapping("/traer/tareas")
     public List<TareaDTO> getTareas(){
         return taRe.traerTareas();
+    }
+
+    @GetMapping("/usuario/{id_usuario}")
+    public List<TareaDTO> getTareasUsuario(
+            @PathVariable Long id_usuario
+    ){
+        return taRe.traerTareasUsuario(id_usuario);
     }
 
     @DeleteMapping("/borrar/{id}")
