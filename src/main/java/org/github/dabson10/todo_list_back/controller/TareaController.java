@@ -9,8 +9,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-//@CrossOrigin(origins = "https://to-do-dabson.netlify.app")
-@CrossOrigin(origins = "http://127.0.0.1:5500")
+@CrossOrigin(origins = "https://to-do-dabson.netlify.app")
+//@CrossOrigin(origins = "http://127.0.0.1:5500")
 @RestController
 @RequestMapping("/tarea")
 public class TareaController {
