@@ -1,16 +1,20 @@
-FROM maven:3.9.6-eclipse-temurin-21-alpine AS build
+FROM eclipse-temurin:17-jdk AS builder
+
 WORKDIR /app
 
-COPY pom.xml .
+COPY .mvn/ .mvn
+COPY mvnw pom.xml ./
+
+RUN chmod +x mvnw
+
 COPY src ./src
+RUN ./mvnw clean package -DskipTests
 
-RUN mvn clean package -DskipTests
+FROM eclipse-temurin:17-jre
 
-FROM amazoncorretto:21-alpine
 WORKDIR /app
 
-COPY --from=build /app/target/*.jar app.jar
+COPY --from=builder /app/target/*.jar app.jar
 
-EXPOSE 10000
-
-ENTRYPOINT ["java", "-jar", "app.jar"]
+EXPOSE 8081
+ENTRYPOINT ["java","-jar", "app.jar"]
