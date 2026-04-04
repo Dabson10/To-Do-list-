@@ -1,5 +1,6 @@
 package org.github.dabson10.todo_list_back.service;
 
+import lombok.AllArgsConstructor;
 import org.github.dabson10.todo_list_back.DTOs.TareaDTO;
 import org.github.dabson10.todo_list_back.entity.Tarea;
 import org.github.dabson10.todo_list_back.entity.Usuario;
@@ -11,16 +12,17 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 
-@Service
+@Service @AllArgsConstructor
 public class TareaService implements InTareaService {
 
+    /**
+     * Gracias al {@code @AllArgsConstructor} ya no necesito hacer el constructor de las
+     * instancias.
+     */
     final InTareaRepository taRe;
     final UsuarioService usuRe;
-    FormatearTarea formDTO = new FormatearTarea();
-    public TareaService(InTareaRepository taRe, UsuarioService usuRe) {
-        this.taRe = taRe;
-        this.usuRe = usuRe;
-    }
+    final FormatearTarea formDTO;
+
 
     @Override
     public void crearTarea(Tarea tarea) {

@@ -3,7 +3,10 @@ package org.github.dabson10.todo_list_back.utilidades;
 import org.github.dabson10.todo_list_back.DTOs.TareaDTO;
 import org.github.dabson10.todo_list_back.entity.Tarea;
 import org.github.dabson10.todo_list_back.entity.Usuario;
+import org.springframework.stereotype.Controller;
 
+
+@Controller
 public class FormatearTarea {
 
     public TareaDTO formatearDTO(Tarea tar){
