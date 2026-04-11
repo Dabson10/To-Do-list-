@@ -3,6 +3,7 @@ package org.github.dabson10.todo_list_back.service;
 import lombok.AllArgsConstructor;
 import org.github.dabson10.todo_list_back.DTOs.TareaDTO;
 import org.github.dabson10.todo_list_back.DTOs.UsuarioTareasDTO;
+import org.github.dabson10.todo_list_back.DTOs.UsuarioUpdateDTO;
 import org.github.dabson10.todo_list_back.entity.Credencial;
 import org.github.dabson10.todo_list_back.entity.Tarea;
 import org.github.dabson10.todo_list_back.entity.Usuario;
@@ -94,7 +95,15 @@ public class UsuarioService implements InUsuarioService{
     }
 
     @Override
-    public void editUsuario(Long id, String nombre) {
-
+    public boolean editUsuario(UsuarioUpdateDTO usuario) {
+        boolean actualizado = false;
+        Usuario usu = this.getUsuario(usuario.getId());
+        if(usu != null){
+            usu.setNombre(usuario.getNombre());
+            usu.setApellido(usuario.getApellido());
+            usuRe.save(usu);
+            actualizado = true;
+        }
+       return actualizado;
     }
 }

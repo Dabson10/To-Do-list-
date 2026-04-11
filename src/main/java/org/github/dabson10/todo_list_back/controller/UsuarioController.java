@@ -1,6 +1,7 @@
 package org.github.dabson10.todo_list_back.controller;
 
 import org.github.dabson10.todo_list_back.DTOs.UsuarioTareasDTO;
+import org.github.dabson10.todo_list_back.DTOs.UsuarioUpdateDTO;
 import org.github.dabson10.todo_list_back.entity.Credencial;
 import org.github.dabson10.todo_list_back.entity.Usuario;
 import org.github.dabson10.todo_list_back.service.UsuarioService;
@@ -46,7 +47,16 @@ public class UsuarioController {
         return new ResponseEntity<>(usuarioConfirmed, HttpStatus.OK);
     }
 
-
+    @PatchMapping("/editar")
+    public ResponseEntity<UsuarioUpdateDTO> cambiarInfo(
+            @RequestBody UsuarioUpdateDTO usuario
+    ){
+        boolean actualizado = seUs.editUsuario(usuario);
+        if(!actualizado){
+            return new ResponseEntity<>(usuario, HttpStatus.BAD_REQUEST);
+        }
+        return new ResponseEntity<>(usuario, HttpStatus.OK);
+    }
 
 
 }

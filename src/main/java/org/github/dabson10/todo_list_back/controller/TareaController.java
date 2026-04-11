@@ -74,19 +74,19 @@ public class TareaController {
     }
 
     @PutMapping("/editar")
-    public ResponseEntity<String> editarTarea(
+    public ResponseEntity<Tarea> editarTarea(
             @RequestBody Tarea tarea
     ){
         taRe.editarTarea(tarea);
-        return new ResponseEntity<>("Tarea editada", HttpStatus.OK);
+        return new ResponseEntity<>(tarea, HttpStatus.OK);
     }
 
     @PatchMapping("/estado")
-    public ResponseEntity<String> estadoTarea(
+    public ResponseEntity<Tarea> estadoTarea(
             @RequestBody Tarea tarea
     ){
         taRe.editarEstado(tarea);
-        return new ResponseEntity<>("Estado cambiado.", HttpStatus.OK);
+        return new ResponseEntity<>(tarea, HttpStatus.OK);
     }
 
 
